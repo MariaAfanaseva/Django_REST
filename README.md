@@ -1,2 +1,3 @@
 # Django_REST
-Django REST project
+Django REST - backend
+Vue CLI - frontend

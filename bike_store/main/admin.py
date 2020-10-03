@@ -4,5 +4,5 @@ from main.models import Bike
 
 @admin.register(Bike)
 class BikeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'price', 'description']
+    list_display = ['id', 'name', 'price', 'image']
     list_filter = ['name']
