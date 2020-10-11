@@ -18,7 +18,7 @@
                     <p>Count: {{ product.quantity }}</p>
                 </div>
                 <div>
-                    <a class="del_btn" @click="deleteBasketProduct(product)">X</a>
+                    <a class="del_btn" @click="removeCartProduct(product)">X</a>
                </div>
             </div>
             <div v-if="cart.length" class="cart_buy_block">
@@ -46,29 +46,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['cart']),
-
-    totalQuantity() {
-      return this.cart.reduce(
-        (sum, product) => {
-          sum += product.quantity;
-          return sum;
-        }, 0,
-      );
-    },
-
-    totalPrice() {
-      return this.cart.reduce(
-        (sum, product) => {
-          sum += product.price * product.quantity;
-          return sum;
-        }, 0,
-      );
-    },
+    ...mapGetters(['cart', 'totalQuantity', 'totalPrice']),
   },
 
   methods: {
-    ...mapActions(['getCart', 'deleteBasketProduct']),
+    ...mapActions(['loadCart', 'removeCartProduct']),
   },
 
 };

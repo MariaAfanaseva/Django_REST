@@ -1,7 +1,6 @@
 export default ({
   state: {
     cart: [],
-    path: 'http://localhost:8000/api/cart/',
   },
 
   mutations: {
@@ -26,32 +25,36 @@ export default ({
   },
 
   actions: {
-    getCart({ commit, state }) {
+    loadCart({ commit, dispatch }) {
       commit('SET_LOADING_STATUS', true);
-      return fetch(state.path)
-        .then((result) => result.json())
-        .catch((error) => {
-          console.log(error);
-        }).then((data) => {
-          commit('SET_CART', data);
-          commit('SET_LOADING_STATUS', false);
-        });
+      return dispatch('getCart').then((data) => {
+        commit('SET_CART', data);
+        commit('SET_LOADING_STATUS', false);
+      });
     },
 
-    postProduct({ commit }, { url, newProduct }) {
-      return fetch(
-        url,
+    changeCartProduct({ dispatch, commit }, { quantity, product }) {
+      dispatch(
+        'putCartProduct',
         {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newProduct),
+          quantity,
+          product,
         },
-      ).then((result) => result.json())
-        .catch((error) => {
-          console.log(error);
-        })
+      ).then((data) => {
+        if (data.result === 1) {
+          commit('CHANGE_COUNT', { product, quantity });
+        } else {
+          console.log("Product doesn't change on server!");
+        }
+      });
+    },
+
+    createCartProduct({ dispatch, commit }, product) {
+      const newProduct = { ...product, quantity: 1 };
+      dispatch(
+        'postCartProduct',
+        { newProduct },
+      )
         .then((data) => {
           if (data.result === 1) {
             commit('ADD_PRODUCT', newProduct);
@@ -61,89 +64,35 @@ export default ({
         });
     },
 
-    addProduct({ state, dispatch }, product) {
+    addCartProduct({ dispatch, state }, product) {
       const cartProduct = state.cart.find(
         (item) => item.id === product.id,
       );
+      const quantity = 1;
       if (cartProduct) {
-        dispatch(
-          'putProduct',
-          {
-            url: `${state.path + product.id}`,
-            quantity: 1,
-            product,
-          },
-        );
+        dispatch('changeCartProduct', { quantity, product });
       } else {
-        const newProduct = { ...product, quantity: 1 };
-        dispatch(
-          'postProduct',
-          {
-            url: state.path,
-            newProduct,
-          },
-        );
+        dispatch('createCartProduct', product);
       }
     },
 
-    putProduct({ commit }, { url, quantity, product }) {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ quantity }),
-      })
-        .then((result) => result.json())
-        .catch((error) => {
-          console.log(error);
-        })
-        .then((data) => {
-          if (data.result === 1) {
-            commit('CHANGE_COUNT', { product, quantity });
-          } else {
-            console.log("Product doesn't delete on server!");
-          }
-        });
-    },
-
-    deleteProduct({ commit }, { url, product }) {
-      return fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then((result) => result.json())
-        .catch((error) => {
-          console.log(`Bad request! ${error.name}`);
-        })
-        .then((data) => {
+    removeCartProduct({ dispatch, commit }, product) {
+      const quantity = -1;
+      if (product.quantity > 1) {
+        dispatch('changeCartProduct', { quantity, product });
+      } else {
+        dispatch(
+          'deleteCartProduct',
+          {
+            product,
+          },
+        ).then((data) => {
           if (data.result === 1) {
             commit('DELETE_PRODUCT', product);
           } else {
             console.log("Product doesn't delete on server!");
           }
         });
-    },
-
-    deleteBasketProduct({ state, dispatch }, product) {
-      if (product.quantity > 1) {
-        dispatch(
-          'putProduct',
-          {
-            url: `${state.path + product.id}`,
-            quantity: -1,
-            product,
-          },
-        );
-      } else {
-        dispatch(
-          'deleteProduct',
-          {
-            url: `${state.path + product.id}`,
-            product,
-          },
-        );
       }
     },
   },
@@ -151,6 +100,24 @@ export default ({
   getters: {
     cart(state) {
       return state.cart;
+    },
+
+    totalQuantity(state) {
+      return state.cart.reduce(
+        (sum, product) => {
+          sum += product.quantity;
+          return sum;
+        }, 0,
+      );
+    },
+
+    totalPrice(state) {
+      return state.cart.reduce(
+        (sum, product) => {
+          sum += product.price * product.quantity;
+          return sum;
+        }, 0,
+      );
     },
   },
 });

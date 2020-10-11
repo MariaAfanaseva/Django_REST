@@ -37,11 +37,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchJSON', 'filter']),
+    ...mapActions(['loadCatalog', 'filter']),
   },
 
   created() {
-    this.fetchJSON();
+    this.loadCatalog();
   },
 };
 

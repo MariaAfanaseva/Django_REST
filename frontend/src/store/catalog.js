@@ -3,7 +3,6 @@ export default ({
     products: [],
     filtered: [],
     loading: false,
-    path: 'http://localhost:8000/api/products',
   },
 
   mutations: {
@@ -21,13 +20,10 @@ export default ({
   },
 
   actions: {
-    fetchJSON({ commit, state }) {
+    loadCatalog({ commit, dispatch }) {
       commit('SET_LOADING_STATUS', true);
-      return fetch(state.path)
-        .then((result) => result.json())
-        .catch((error) => {
-          console.log(error);
-        }).then((data) => {
+      return dispatch('getProducts')
+        .then((data) => {
           commit('SET_PRODUCTS', data);
           commit('SET_FILTERED', data);
           commit('SET_LOADING_STATUS', false);

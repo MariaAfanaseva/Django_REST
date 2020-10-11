@@ -16,7 +16,6 @@
               :alt="product.name">
             <p class='basket_price'>Price: {{ product.price * product.quantity }} &euro;</p>
             <p class='basket_count'>Count: {{ product.quantity }}</p>
-            <!-- <a class="del_btn" @click="deleteBasketProduct(product)">Delete</a> -->
         </div>
         <div class="cart_btn_block">
             <router-link to='/basket' class="cart_btn">Cart</router-link>
@@ -40,33 +39,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['cart']),
-
-    totalQuantity() {
-      return this.cart.reduce(
-        (sum, product) => {
-          sum += product.quantity;
-          return sum;
-        }, 0,
-      );
-    },
-
-    totalPrice() {
-      return this.cart.reduce(
-        (sum, product) => {
-          sum += product.price * product.quantity;
-          return sum;
-        }, 0,
-      );
-    },
+    ...mapGetters(['cart', 'totalQuantity']),
   },
 
   methods: {
-    ...mapActions(['getCart', 'deleteBasketProduct']),
+    ...mapActions(['loadCart', 'removeCartProduct']),
   },
 
   created() {
-    this.getCart();
+    this.loadCart();
   },
 
 };

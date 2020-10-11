@@ -16,7 +16,7 @@
                             Price: {{ product.price }} &euro;
                         </p>
                         <button class="product_button_buy"
-                            @click="addProduct(product)">Add to cart
+                            @click="addCartProduct(product)">Add to cart
                         </button>
                     </div>
             </div>
@@ -35,11 +35,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getProduct', 'addProduct']),
+    ...mapActions(['loadProductDetails', 'addCartProduct']),
   },
 
   created() {
-    this.getProduct(this.$route.params.id);
+    this.loadProductDetails(this.$route.params.id);
   },
 };
 </script>
