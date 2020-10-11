@@ -17,11 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 
-from main.urls import router as main_router
-from cart.urls import router as cart_router
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(main_router.urls)),
-    path('cart/', include(cart_router.urls))
+    path('api-auth/', include('rest_framework.urls')),
+    path('main/', include('main.urls')),
+    path('cart/', include('cart.urls')),
 ]

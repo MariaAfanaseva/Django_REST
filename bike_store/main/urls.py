@@ -1,7 +1,8 @@
-from rest_framework import routers
+from django.urls import path
 
-from .views import BikeViewSet
+from .views import BikeView, BikeDetails
 
-router = routers.DefaultRouter()
-
-router.register('bikes', BikeViewSet, basename='bikes')
+urlpatterns = [
+    path('bikes/', BikeView.as_view()),
+    path('bike_detail/<int:pk>/', BikeDetails.as_view()),
+]
