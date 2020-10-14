@@ -1,3 +1,5 @@
+import { getProductDetails } from '../api/base';
+
 export default ({
   state: {
     product: {},
@@ -10,12 +12,13 @@ export default ({
   },
 
   actions: {
-    loadProductDetails({ commit, dispatch }, id) {
+    loadProductDetails({ commit }, id) {
       commit('SET_LOADING_STATUS', true);
-      return dispatch('getProductDetails', id).then((data) => {
-        commit('SET_PRODUCT', data);
-        commit('SET_LOADING_STATUS', false);
-      });
+      return getProductDetails(id)
+        .then((data) => {
+          commit('SET_PRODUCT', data);
+          commit('SET_LOADING_STATUS', false);
+        });
     },
   },
 

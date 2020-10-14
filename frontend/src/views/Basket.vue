@@ -3,17 +3,17 @@
         <h1 class="title">Schop cart</h1>
         <div>
             <p v-if="!cart.length" class="cart_info">No products!</p>
-            <div v-for="product in cart" :key="product.id" class="cart_detail_item">
+            <div v-for="product in cart" :key="product.product_id" class="cart_detail_item">
                 <div>
                     <img v-if="product.image" class="cart_detail_img"
                     :src="require(`../assets/foto/${product.image}`)"
-                    :alt="product.name">
+                    :alt="product.product_name">
                     <img v-else
                     :src="require(`../assets/foto/${defaultImg}`)"
-                    :alt="product.name">
+                    :alt="product.product_name">
                 </div>
                 <div class="cart_detail_text">
-                    <h3>{{ product.name }}</h3>
+                    <h3>{{ product.product_name }}</h3>
                     <p>Price: {{ product.price * product.quantity }} &euro;</p>
                     <p>Count: {{ product.quantity }}</p>
                 </div>

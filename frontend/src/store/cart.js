@@ -1,3 +1,7 @@
+import {
+  getCart, putCartProduct, postCartProduct, deleteCartProduct,
+} from '../api/base';
+
 export default ({
   state: {
     cart: [],
@@ -10,7 +14,7 @@ export default ({
 
     CHANGE_COUNT(state, { product, quantity }) {
       const basketProduct = state.cart.find(
-        (item) => item.id === product.id,
+        (item) => item.product_id === product.product_id,
       );
       basketProduct.quantity += quantity;
     },
@@ -25,36 +29,29 @@ export default ({
   },
 
   actions: {
-    loadCart({ commit, dispatch }) {
+    loadCart({ commit }) {
       commit('SET_LOADING_STATUS', true);
-      return dispatch('getCart').then((data) => {
-        commit('SET_CART', data);
-        commit('SET_LOADING_STATUS', false);
-      });
+      return getCart()
+        .then((data) => {
+          commit('SET_CART', data);
+          commit('SET_LOADING_STATUS', false);
+        });
     },
 
-    changeCartProduct({ dispatch, commit }, { quantity, product }) {
-      dispatch(
-        'putCartProduct',
-        {
-          quantity,
-          product,
-        },
-      ).then((data) => {
-        if (data.result === 1) {
-          commit('CHANGE_COUNT', { product, quantity });
-        } else {
-          console.log("Product doesn't change on server!");
-        }
-      });
+    changeCartProduct({ commit }, { quantity, product }) {
+      putCartProduct(quantity, product)
+        .then((data) => {
+          if (data.result === 1) {
+            commit('CHANGE_COUNT', { product, quantity });
+          } else {
+            console.log("Product doesn't change on server!");
+          }
+        });
     },
 
-    createCartProduct({ dispatch, commit }, product) {
+    createCartProduct({ commit }, product) {
       const newProduct = { ...product, quantity: 1 };
-      dispatch(
-        'postCartProduct',
-        { newProduct },
-      )
+      postCartProduct(newProduct)
         .then((data) => {
           if (data.result === 1) {
             commit('ADD_PRODUCT', newProduct);
@@ -64,9 +61,9 @@ export default ({
         });
     },
 
-    addCartProduct({ dispatch, state }, product) {
+    addCartProduct({ state, dispatch }, product) {
       const cartProduct = state.cart.find(
-        (item) => item.id === product.id,
+        (item) => item.product_id === product.product_id,
       );
       const quantity = 1;
       if (cartProduct) {
@@ -81,18 +78,14 @@ export default ({
       if (product.quantity > 1) {
         dispatch('changeCartProduct', { quantity, product });
       } else {
-        dispatch(
-          'deleteCartProduct',
-          {
-            product,
-          },
-        ).then((data) => {
-          if (data.result === 1) {
-            commit('DELETE_PRODUCT', product);
-          } else {
-            console.log("Product doesn't delete on server!");
-          }
-        });
+        deleteCartProduct(product)
+          .then((data) => {
+            if (data.result === 1) {
+              commit('DELETE_PRODUCT', product);
+            } else {
+              console.log("Product doesn't delete on server!");
+            }
+          });
       }
     },
   },

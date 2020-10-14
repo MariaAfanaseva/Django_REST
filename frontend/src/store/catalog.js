@@ -1,3 +1,5 @@
+import { getProducts } from '../api/base';
+
 export default ({
   state: {
     products: [],
@@ -20,9 +22,9 @@ export default ({
   },
 
   actions: {
-    loadCatalog({ commit, dispatch }) {
+    loadCatalog({ commit }) {
       commit('SET_LOADING_STATUS', true);
-      return dispatch('getProducts')
+      return getProducts()
         .then((data) => {
           commit('SET_PRODUCTS', data);
           commit('SET_FILTERED', data);
