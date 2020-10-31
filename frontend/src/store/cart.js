@@ -1,5 +1,5 @@
 import {
-  getCart, putCartProduct, postCartProduct, deleteCartProduct,
+  getCart, postCartProduct, deleteCartProduct, putCartProduct,
 } from '../api/base';
 
 export default ({
@@ -12,9 +12,9 @@ export default ({
       state.cart = data;
     },
 
-    CHANGE_COUNT(state, { product, quantity }) {
+    CHANGE_COUNT(state, { productId, quantity }) {
       const basketProduct = state.cart.find(
-        (item) => item.product_id === product.product_id,
+        (item) => item.id === productId,
       );
       basketProduct.quantity += quantity;
     },
@@ -32,55 +32,52 @@ export default ({
     loadCart({ commit }) {
       commit('SET_LOADING_STATUS', true);
       return getCart()
-        .then((data) => {
-          commit('SET_CART', data);
+        .then((resp) => {
+          commit('SET_CART', resp.data);
           commit('SET_LOADING_STATUS', false);
         });
     },
 
-    changeCartProduct({ commit }, { quantity, product }) {
-      putCartProduct(quantity, product)
-        .then((data) => {
-          if (data.result === 1) {
-            commit('CHANGE_COUNT', { product, quantity });
+    changeCartProduct({ commit }, data) {
+      putCartProduct(data)
+        .then((result) => {
+          if (result.status === 200) {
+            commit('CHANGE_COUNT', data);
           } else {
             console.log("Product doesn't change on server!");
           }
         });
     },
 
-    createCartProduct({ commit }, product) {
-      const newProduct = { ...product, quantity: 1 };
-      postCartProduct(newProduct)
-        .then((data) => {
-          if (data.result === 1) {
-            commit('ADD_PRODUCT', newProduct);
-          } else {
-            console.log("Product doesn't add on server!");
-          }
-        });
-    },
-
-    addCartProduct({ state, dispatch }, product) {
+    addCartProduct({ state, commit }, product) {
       const cartProduct = state.cart.find(
-        (item) => item.product_id === product.product_id,
+        (item) => item.id === product.id,
       );
       const quantity = 1;
+      const productId = product.id;
+
       if (cartProduct) {
-        dispatch('changeCartProduct', { quantity, product });
+        this.dispatch('changeCartProduct', { productId, quantity });
       } else {
-        dispatch('createCartProduct', product);
+        postCartProduct({ productId, quantity })
+          .then((data) => {
+            if (data.status === 201) {
+              commit('ADD_PRODUCT', { ...product, quantity });
+            } else {
+              console.log("Product doesn't add on server!");
+            }
+          });
       }
     },
 
     removeCartProduct({ dispatch, commit }, product) {
       const quantity = -1;
       if (product.quantity > 1) {
-        dispatch('changeCartProduct', { quantity, product });
+        dispatch('changeCartProduct', { productId: product.id, quantity });
       } else {
-        deleteCartProduct(product)
-          .then((data) => {
-            if (data.result === 1) {
+        deleteCartProduct(product.id)
+          .then((result) => {
+            if (result.status === 200) {
               commit('DELETE_PRODUCT', product);
             } else {
               console.log("Product doesn't delete on server!");

@@ -18,6 +18,12 @@
                         <li class="menu_list">
                             <router-link class="menu_link" to="/contacts">Contacts</router-link>
                         </li>
+                        <li v-if="isAuthenticated" class="menu_list">
+                            <a class="menu_link" @click="logout">Logout</a>
+                        </li>
+                        <li v-else class="menu_list">
+                            <router-link class="menu_link" to="/login">Login</router-link>
+                        </li>
                         <Cart/>
                     </ul>
                 </div>
@@ -31,7 +37,7 @@
 
 <script>
 import Cart from '@/components/Cart.vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -39,8 +45,17 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['loadingState']),
+    ...mapGetters(['loadingState', 'isAuthenticated']),
   },
 
+  methods: {
+    ...mapActions(['userLogout']),
+    logout() {
+      this.userLogout()
+        .then(() => {
+          this.$router.push('/');
+        });
+    },
+  },
 };
 </script>

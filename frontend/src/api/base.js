@@ -1,7 +1,10 @@
+import axios from 'axios';
+
 const APIUrl = 'http://localhost:8000';
 const productsPath = `${APIUrl}/main/bikes/`;
 const productPath = `${APIUrl}/main/bike_details/`;
 const cartPath = `${APIUrl}/cart/items/`;
+const cartUpdatePath = `${APIUrl}/cart/update/`;
 
 const getProducts = () => fetch(productsPath)
   .then((result) => result.json())
@@ -15,52 +18,36 @@ const getProductDetails = (id) => fetch(productPath + id)
     console.log(error);
   });
 
-const getCart = () => fetch(cartPath)
-  .then((result) => result.json())
-  .catch((error) => {
-    console.log(error);
-  });
+const getCart = () => axios({
+  url: cartPath,
+}).catch((error) => {
+  console.log(error);
+});
 
-const postCartProduct = (newProduct) => fetch(
-  cartPath,
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newProduct),
-  },
-)
-  .then((result) => result.json())
-  .catch((error) => {
-    console.log(error);
-  });
+const postCartProduct = ({ productId, quantity }) => axios({
+  method: 'POST',
+  url: `${cartUpdatePath + productId}/`,
+  data: { quantity },
+}).catch((error) => {
+  console.log(error);
+});
 
-const putCartProduct = (quantity, product) => fetch(`${cartPath + product.id}`,
-  {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ quantity }),
-  })
-  .then((result) => result.json())
-  .catch((error) => {
-    console.log(error);
-  });
+const putCartProduct = ({ productId, quantity }) => axios({
+  method: 'PUT',
+  url: `${cartUpdatePath + productId}/`,
+  data: { quantity },
+}).catch((error) => {
+  console.log(error);
+});
 
-const deleteCartProduct = (product) => fetch(`${cartPath + product.id}`, {
+const deleteCartProduct = (productId) => axios({
   method: 'DELETE',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-  .then((result) => result.json())
-  .catch((error) => {
-    console.log(`Bad request! ${error.name}`);
-  });
+  url: `${cartUpdatePath + productId}/`,
+}).catch((error) => {
+  console.log(error);
+});
 
 export {
   getProducts, getProductDetails, getCart, postCartProduct,
-  putCartProduct, deleteCartProduct,
+  putCartProduct, deleteCartProduct, APIUrl,
 };

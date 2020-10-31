@@ -3,7 +3,7 @@
         <h1 class="title">Schop cart</h1>
         <div>
             <p v-if="!cart.length" class="cart_info">No products!</p>
-            <div v-for="product in cart" :key="product.product_id" class="cart_detail_item">
+            <div v-for="product in cart" :key="product.id" class="cart_detail_item">
                 <div>
                     <img v-if="product.image" class="cart_detail_img"
                     :src="require(`../assets/foto/${product.image}`)"
@@ -46,13 +46,18 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['cart', 'totalQuantity', 'totalPrice']),
+    ...mapGetters(['cart', 'totalQuantity', 'totalPrice', 'isAuthenticated']),
   },
 
   methods: {
     ...mapActions(['loadCart', 'removeCartProduct']),
   },
 
+  mounted() {
+    if (!this.isAuthenticated) {
+      this.$router.push('/login');
+    }
+  },
 };
 
 </script>

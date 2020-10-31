@@ -46,13 +46,13 @@ body{
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
   }
-  
+
   /* Safari */
   @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }
   }
-  
+
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -86,7 +86,6 @@ body{
 }
 
 .menu_list{
-    width: 120px;
     height: 30px;
     line-height: 30px;
 
@@ -247,7 +246,7 @@ body{
 .del_btn:hover {
     background-color: #030303
 }
-  
+
 .del_btn:active {
     top: .1em;
     left: .1em;
@@ -287,7 +286,7 @@ body{
 .cart_btn:hover {
     background-color: #030303
 }
-  
+
 .cart_btn:active {
     top: .1em;
     left: .1em;
@@ -591,8 +590,12 @@ input[type="email"]:focus{
     outline: none;
 }
 
-input[type="text"]{
-    text-transform: capitalize;
+/*Login*/
+
+.login{
+    display: flex;
+    justify-content: center;
+    margin: 50px;
 }
 
 .map{
