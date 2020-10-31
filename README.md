@@ -1,9 +1,6 @@
 # Django_REST
-```
-Django REST - backend
-```
+Django REST - backend. 
 Vue CLI - frontend
-```
 
 ## Backend project setup 
 ```
