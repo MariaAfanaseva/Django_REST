@@ -1,18 +1,37 @@
 from rest_framework import serializers
 from .models import Cart
-from main.serializers import BikeSerializer
 
 
 class CartSerializer(serializers.ModelSerializer):
+    id = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
-        fields = ('id', 'user', 'quantity', 'bike')
+        fields = ('id', 'name', 'image', 'price', 'quantity')
+
+    def get_id(self, obj):
+        return obj.bike.pk
+
+    def get_name(self, obj):
+        return obj.bike.name
+
+    def get_image(self, obj):
+        return obj.bike.image
+
+    def get_price(self, obj):
+        return obj.bike.price
 
 
-class CartDetailSerializer(serializers.ModelSerializer):
-    bike = BikeSerializer(read_only=True)
+class UpdateCartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ('id', 'user', 'quantity', 'bike')
+        fields = ('quantity',)
+
+    def validate_quantity(self, value):
+        if not value:
+            raise serializers.ValidationError('Quantity must be greater than zero.')
+        return value
