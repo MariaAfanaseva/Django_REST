@@ -20,7 +20,7 @@ class BikeView(views.APIView):
         return super(BikeView, self).dispatch(request, *args, **kwargs)
 
 
-class BikeDetails(views.APIView):
+class BikeDetailsView(views.APIView):
 
     def get(self, request, pk):
         bike_detail = BikeDetail.objects.get(bike__id=pk)
@@ -29,4 +29,4 @@ class BikeDetails(views.APIView):
 
     @method_decorator(cache_page(60))
     def dispatch(self, request, *args, **kwargs):
-        return super(BikeDetails, self).dispatch(request, *args, **kwargs)
+        return super(BikeDetailsView, self).dispatch(request, *args, **kwargs)
