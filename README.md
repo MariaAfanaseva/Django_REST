@@ -1,6 +1,14 @@
 # Django_REST
+```
 Django REST - backend
+```
 Vue CLI - frontend
+```
+
+## Backend project setup 
+```
+python manage.py runserver
+```
 
 ## Frontend project setup 
 ```
