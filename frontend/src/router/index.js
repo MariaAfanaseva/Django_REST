@@ -33,7 +33,15 @@ const routes = [
     name: 'Basket',
     component: () => import('../views/Basket.vue'),
   },
-  { path: '*', redirect: '/' },
+  {
+    path: '*',
+    redirect: '/',
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login.vue'),
+  },
 ];
 
 const router = new VueRouter({
