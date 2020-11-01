@@ -25,7 +25,6 @@ export default ({
     },
 
     AUTH_ERROR(state) {
-      localStorage.removeItem('user-token');
       state.status = 'error';
     },
 
@@ -47,6 +46,7 @@ export default ({
         })
         .catch((err) => {
           console.log(err);
+          commit('DELETE_TOKEN');
           commit('AUTH_ERROR', err);
         });
     },

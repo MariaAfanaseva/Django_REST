@@ -35,6 +35,10 @@ export default ({
         .then((resp) => {
           commit('SET_CART', resp.data);
           commit('SET_LOADING_STATUS', false);
+        })
+        .catch((error) => {
+          console.log(error);
+          commit('DELETE_TOKEN');
         });
     },
 
