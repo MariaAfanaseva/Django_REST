@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
+import store from '../store';
 
 Vue.use(VueRouter);
 
@@ -32,6 +33,9 @@ const routes = [
     path: '/basket',
     name: 'Basket',
     component: () => import('../views/Basket.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '*',
@@ -42,12 +46,29 @@ const routes = [
     name: 'Login',
     component: () => import('../views/Login.vue'),
   },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/Register.vue'),
+  },
 ];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.getters.isAuthenticated) {
+      next();
+      return;
+    }
+    next('/login');
+  } else {
+    next();
+  }
 });
 
 export default router;
