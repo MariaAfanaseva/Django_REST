@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { loginRequest, logoutRequest } from '../api/auth_api';
+import { loginRequest, logoutRequest, registerRequest } from '../api/auth_api';
 
 export default ({
   state: {
@@ -58,6 +58,20 @@ export default ({
         })
         .catch((err) => {
           console.log(err);
+        });
+    },
+
+    userRegister({ commit, dispatch }, user) {
+      commit('AUTH_REQUEST');
+      return registerRequest(user)
+        .then((result) => {
+          const { token } = result.data;
+          commit('AUTH_SUCCESS', token);
+          dispatch('loadCart');
+        })
+        .catch((err) => {
+          commit('DELETE_TOKEN');
+          commit('AUTH_ERROR', err);
         });
     },
   },

@@ -21,9 +21,14 @@
                         <li v-if="isAuthenticated" class="menu_list">
                             <a class="menu_link" @click="logout">Logout</a>
                         </li>
-                        <li v-else class="menu_list">
+                       <template v-else>
+                        <li  class="menu_list">
                             <router-link class="menu_link" to="/login">Login</router-link>
                         </li>
+                        <li class="menu_list">
+                            <router-link class="menu_link" to="/register">Register</router-link>
+                        </li>
+                       </template>
                         <Cart/>
                     </ul>
                 </div>
