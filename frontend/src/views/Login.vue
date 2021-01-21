@@ -2,6 +2,9 @@
  <div class="contacts_block" >
    <form @submit.prevent="login">
      <h1>Sign in</h1>
+     <div class="error" v-if="authStatus==='error'">
+       <p v-for="(error, index) in errors" :key="index">{{ error }}</p>
+     </div>
      <input class="contacts_input" required v-model="email" type="email" placeholder="Email"/>
      <br>
      <input class="contacts_input" required v-model="password"
@@ -13,7 +16,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Login',
@@ -25,13 +28,19 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters(['authStatus', 'errors']),
+  },
+
   methods: {
     ...mapActions(['userLogin']),
 
     login() {
       const { email, password } = this;
       this.userLogin({ email, password }).then(() => {
-        this.$router.push('/basket');
+        if (this.authStatus === 'success') {
+          this.$router.push('/basket');
+        }
       });
     },
   },

@@ -5,11 +5,13 @@ export default ({
   state: {
     token: localStorage.getItem('user-token') || '',
     status: '',
+    errors: [],
   },
 
   getters: {
     isAuthenticated: (state) => !!state.token,
     authStatus: (state) => state.status,
+    errors: (state) => state.errors,
   },
 
   mutations: {
@@ -24,8 +26,9 @@ export default ({
       Vue.prototype.$http.defaults.headers.common.Authorization = `Token ${token}`;
     },
 
-    AUTH_ERROR(state) {
+    AUTH_ERROR(state, err) {
       state.status = 'error';
+      state.errors = Object.values(err);
     },
 
     DELETE_TOKEN(state) {
@@ -45,9 +48,8 @@ export default ({
           dispatch('loadCart');
         })
         .catch((err) => {
-          console.log(err);
           commit('DELETE_TOKEN');
-          commit('AUTH_ERROR', err);
+          commit('AUTH_ERROR', err.response.data.errors.error);
         });
     },
 
