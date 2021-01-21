@@ -3,7 +3,7 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, password):
+    def create_user(self, first_name, last_name, email, password, **extra_fields):
         if not email:
             raise ValueError('The Email must be set.')
 
@@ -17,11 +17,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)  # Default database in settings
         return user
 
-    def create_superuser(self, email, first_name, last_name, password):
+    def create_superuser(self, first_name, last_name, email, password, **extra_fields):
         user = self.create_user(
-            email=email,
             first_name=first_name,
             last_name=last_name,
+            email=email,
             password=password
         )
         user.is_superuser = True
@@ -32,6 +32,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    username = None
     email = models.EmailField(
         verbose_name='Email address',
         max_length=255,

@@ -20,8 +20,6 @@ const getProductDetails = (id) => fetch(productPath + id)
 
 const getCart = () => axios({
   url: cartPath,
-}).catch((error) => {
-  console.log(error);
 });
 
 const postCartProduct = ({ productId, quantity }) => axios({

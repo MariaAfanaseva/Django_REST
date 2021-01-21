@@ -52,12 +52,6 @@ export default {
   methods: {
     ...mapActions(['loadCart', 'removeCartProduct']),
   },
-
-  mounted() {
-    if (!this.isAuthenticated) {
-      this.$router.push('/login');
-    }
-  },
 };
 
 </script>
