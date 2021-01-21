@@ -4,7 +4,7 @@
       <i class="fa fa-shopping-cart btn_basket"></i>
       <p class="basket_text" v-if="cart.length">({{ totalQuantity }})</p>
     </div>
-    <div v-show="isVisible" class="basket_products">
+    <div v-show="isVisible" @click="isVisible = !isVisible" class="basket_products">
         <p v-if="!cart.length">No products!</p>
         <div class="basket_item" v-for="product in cart" :key="product.id">
             <h3>{{ product.name }}</h3>

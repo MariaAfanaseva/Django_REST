@@ -16,7 +16,7 @@
                             Price: {{ product.price }} &euro;
                         </p>
                         <button class="product_button_buy"
-                            @click="addCartProduct(product)">Add to cart
+                            @click="checkAuth(product)">Add to cart
                         </button>
                     </div>
             </div>
@@ -31,11 +31,19 @@ export default {
   name: 'Product',
 
   computed: {
-    ...mapGetters(['product']),
+    ...mapGetters(['product', 'isAuthenticated']),
   },
 
   methods: {
     ...mapActions(['loadProductDetails', 'addCartProduct']),
+
+    checkAuth(product) {
+      if (this.isAuthenticated) {
+        this.addCartProduct(product);
+      } else {
+        this.$router.push('/login');
+      }
+    },
   },
 
   created() {
