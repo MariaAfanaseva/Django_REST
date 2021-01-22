@@ -11,21 +11,27 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+config_path = os.path.join(BASE_DIR, 'conf', '.env')
+env_path = Path(config_path)
+load_dotenv(dotenv_path=env_path)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '8s6x=zi%i+3w5o-we3qafe+r%dd*r1&17-32ek*jxn+c+h2d^r'
+DEBUG = (os.getenv('DEBUG') == 'True')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if DEBUG:
+    ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = []
+    DOMAIN_NAME = 'http://localhost:8000'
+else:
+    ALLOWED_HOSTS = ['*']
+
+    DOMAIN_NAME = 'http://192.168.178.44'
 
 
 # Application definition
@@ -81,12 +87,24 @@ WSGI_APPLICATION = 'bike_store.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+if os.getenv('DOCKER') == 'True':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation

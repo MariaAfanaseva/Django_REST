@@ -1,7 +1,9 @@
 .idea
 *.sqlite3
 *.pyc
+*.yml
 migrations/
+conf/
 
 .DS_Store
 node_modules

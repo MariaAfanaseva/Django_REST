@@ -1,7 +1,9 @@
 import json
 import os
 from django.core.management import BaseCommand
+from django.contrib.auth import get_user_model
 from main.models import Bike, BikeDetail
+
 
 JSON_PATH = 'main/json/'
 
@@ -30,3 +32,6 @@ class Command(BaseCommand):
 
             new_bike_details = BikeDetail(**item)
             new_bike_details.save()
+
+        get_user_model().objects.all().delete()
+        get_user_model().objects.create_superuser('Admin', 'Adminovich', 'admin@admin.com', 'admin')
