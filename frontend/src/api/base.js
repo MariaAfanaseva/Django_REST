@@ -5,6 +5,7 @@ const productsPath = `${APIUrl}/main/bikes/`;
 const productPath = `${APIUrl}/main/bike_details/`;
 const cartPath = `${APIUrl}/cart/items/`;
 const cartUpdatePath = `${APIUrl}/cart/update/`;
+const contactsPath = `${APIUrl}/contact/add/`;
 
 const getProducts = () => fetch(productsPath)
   .then((result) => result.json())
@@ -45,7 +46,13 @@ const deleteCartProduct = (productId) => axios({
   console.log(error);
 });
 
+const sendContactData = (form) => axios({
+  method: 'POST',
+  data: form,
+  url: `${contactsPath}`,
+});
+
 export {
   getProducts, getProductDetails, getCart, postCartProduct,
-  putCartProduct, deleteCartProduct, APIUrl,
+  putCartProduct, deleteCartProduct, sendContactData, APIUrl,
 };
