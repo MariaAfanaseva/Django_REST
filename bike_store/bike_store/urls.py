@@ -23,4 +23,5 @@ urlpatterns = [
     path('main/', include('main.urls')),
     path('cart/', include('cart.urls')),
     path('user/', include('authapp.urls')),
+    path('contact/', include('contact.urls')),
 ]
