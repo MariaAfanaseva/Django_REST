@@ -17,13 +17,18 @@ class UserLoginSerializer(serializers.Serializer):
         email = attrs.get('email', None)
         password = attrs.get('password', None)
         if not email or not password:
-            raise serializers.ValidationError('An email and a password are required in login.')
+            raise serializers.ValidationError({'error': 'An email and a password are required in login.'})
 
-        user = get_user_model().objects.get(email=email)
+        try:
+            user = get_user_model().objects.get(email=email)
+        except get_user_model().DoesNotExist:
+            user = None
 
         if user:
             if not user.check_password(password):
-                raise serializers.ValidationError('Incorrect credentials please try again.')
+                raise serializers.ValidationError({'error': 'Incorrect password please try again.'})
+        else:
+            raise serializers.ValidationError({'error': f'User with email {email} does not exist.'})
 
         attrs['user'] = user
         return attrs

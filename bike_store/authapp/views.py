@@ -10,12 +10,14 @@ class UserLoginView(views.APIView):
 
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-        })
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({
+                'token': token.key,
+            })
+        else:
+            return Response({'errors': serializer.errors}, status=status.HTTP_403_FORBIDDEN)
 
 
 class UserLogoutView(views.APIView):
