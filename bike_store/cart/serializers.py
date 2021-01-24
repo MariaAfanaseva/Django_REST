@@ -25,7 +25,8 @@ class CartSerializer(serializers.ModelSerializer):
         return obj.bike.price
 
 
-class UpdateCartSerializer(serializers.ModelSerializer):
+class UpdateCartSerializer(serializers.Serializer):
+    quantity = serializers.IntegerField()
 
     class Meta:
         model = Cart
@@ -33,5 +34,5 @@ class UpdateCartSerializer(serializers.ModelSerializer):
 
     def validate_quantity(self, value):
         if not value:
-            raise serializers.ValidationError('Quantity must be greater than zero.')
+            raise serializers.ValidationError('Quantity must be not zero.')
         return value
