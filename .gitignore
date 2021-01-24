@@ -2,8 +2,10 @@
 *.sqlite3
 *.pyc
 *.yml
+*.pem
 migrations/
 conf/
+static/
 
 .DS_Store
 node_modules

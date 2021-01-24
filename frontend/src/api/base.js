@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const APIUrl = 'http://localhost:8000';
+const APIUrl = 'http://3.131.13.70';
+// const APIUrl = 'http://127.0.0.1:8000';
 const productsPath = `${APIUrl}/main/bikes/`;
 const productPath = `${APIUrl}/main/bike_details/`;
 const cartPath = `${APIUrl}/cart/items/`;
