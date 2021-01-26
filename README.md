@@ -1,7 +1,15 @@
-# Django_REST
-Django REST - backend. 
-Vue CLI - frontend
-
+# Bike store 
+Online mountain bikes shop.
+## Backend
+https://bikeshopnew.tk/admin <br/>
+```
+Django REST, PostgreSQL, Docker, Docker Compose, AWS (EC2, RDS)
+```
+## Frontend
+https://www.bikestore.ml <br/>
+```
+Vue CLI, AWS (S3, CloudFront, Certificate Manager)
+```
 ## Backend project setup 
 ```
 python manage.py runserver
