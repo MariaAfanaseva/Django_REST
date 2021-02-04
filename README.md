@@ -1,5 +1,6 @@
 # Bike store 
-Online mountain bikes shop.
+Online mountain bikes shop.<br/>
+Users can search bikes, login, logout, add a bike to the cart, watch the cart, and sent a message to the shop administrator.
 ## Backend
 https://bikeshopnew.tk/admin <br/>
 ```
