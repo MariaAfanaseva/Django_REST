@@ -1,6 +1,6 @@
 # Bike store 
 Online mountain bikes shop.<br/>
-Users can search bikes, login, logout, add a bike to the cart, watch the cart, and sent a message to the shop administrator.
+Users can search bikes, register, login, logout, add a bike to the cart, view the cart, and send a message to the shop administrator.
 ## Backend
 https://bikeshopnew.tk/admin <br/>
 ```
@@ -11,12 +11,12 @@ https://www.bikestore.ml <br/>
 ```
 Vue CLI, AWS (S3, CloudFront, Certificate Manager)
 ```
-## Backend project setup 
+### Backend project setup 
 ```
 python manage.py runserver
 ```
 
-## Frontend project setup 
+### Frontend project setup 
 ```
 npm install
 ```
